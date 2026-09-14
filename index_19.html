@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SquadLogic.ai — Diagnose. Pilot. Prove ROI.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b1f3a;
+    --navy-2:#122a4d;
+    --gold:#c9a227;
+    --gold-light:#e4c65a;
+    --cream:#faf7f0;
+    --paper:#f3ede1;
+    --ink:#1b2430;
+    --muted:#5b6472;
+    --line:rgba(11,31,58,0.12);
+    --radius:14px;
+    --shadow:0 10px 30px rgba(11,31,58,0.10);
+    --maxw:1160px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Work Sans',system-ui,sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    line-height:1.55;
+  }
+  h1,h2,h3,.serif{font-family:'Spectral',Georgia,serif;}
+  h1,h2,h3{margin:0 0 .5em;color:var(--navy);}
+  p{margin:0 0 1em;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .eyebrow{
+    display:inline-block;
+    font-size:.8rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:14px 28px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:1rem;
+    cursor:pointer;
+    border:2px solid transparent;
+    text-decoration:none;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn-primary{background:var(--gold);color:var(--navy);}
+  .btn-primary:hover{background:var(--gold-light);transform:translateY(-1px);box-shadow:0 8px 18px rgba(201,162,39,.35);}
+  .btn-ghost{background:transparent;border-color:rgba(255,255,255,.5);color:#fff;}
+  .btn-ghost:hover{background:rgba(255,255,255,.12);}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    background:radial-gradient(circle at 85% 15%, var(--navy-2), var(--navy) 60%);
+    color:#fff;
+    padding:56px 0 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:48px;
+    align-items:center;
+  }
+  .wordmark{
+    font-family:'Spectral',serif;
+    font-weight:700;
+    font-size:1.5rem;
+    letter-spacing:.01em;
+    margin-bottom:28px;
+  }
+  .wordmark .dot{color:var(--gold);}
+  .brand-lockup{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    margin-bottom:28px;
+  }
+  .brand-lockup .wordmark{margin-bottom:0;line-height:1;}
+  .brand-lockup .eyebrow{margin-bottom:0;line-height:1;}
+  header.hero .wordmark{font-size:3rem;}
+  .hero h1{
+    color:#fff;
+    font-size:clamp(2rem,4vw,2.9rem);
+    line-height:1.15;
+    margin-bottom:18px;
+  }
+  .hero .subhead{
+    color:rgba(255,255,255,.82);
+    font-size:1.1rem;
+    max-width:46ch;
+    margin-bottom:30px;
+  }
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:14px;}
+  .video-card{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:var(--radius);
+    padding:10px;
+    box-shadow:var(--shadow);
+  }
+  .video-card video, .video-card img{
+    width:100%;
+    border-radius:9px;
+    display:block;
+    background:#0a1930;
+    aspect-ratio:16/9;
+    object-fit:cover;
+  }
+  .video-caption{
+    font-size:.8rem;
+    color:rgba(255,255,255,.6);
+    text-align:center;
+    padding-top:8px;
+  }
+
+  /* ---------- STRIP ---------- */
+  .strip{
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    border-top:1px solid var(--line);
+  }
+  .strip .wrap{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px 34px;
+    padding:20px 24px;
+    text-align:center;
+  }
+  .strip-item{
+    font-weight:600;
+    color:var(--navy);
+    font-size:.98rem;
+  }
+  .strip-item .n{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--gold);
+    color:var(--navy);
+    font-size:.75rem;
+    margin-right:8px;
+  }
+
+  section{padding:72px 0;}
+  .section-head{max-width:640px;margin:0 auto 40px;text-align:center;}
+  .section-head h2{font-size:clamp(1.6rem,3vw,2.1rem);}
+  .section-head p{color:var(--muted);font-size:1.05rem;}
+
+  /* ---------- TIERS ---------- */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .tier-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px 26px;
+    box-shadow:var(--shadow);
+  }
+  .tier-card .tag{
+    display:inline-block;
+    font-size:.75rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--gold);
+    background:rgba(201,162,39,.12);
+    padding:4px 10px;
+    border-radius:999px;
+    margin-bottom:14px;
+  }
+  .tier-card h3{font-size:1.3rem;margin-bottom:8px;}
+  .tier-card p{color:var(--muted);font-size:.98rem;margin-bottom:0;}
+
+  /* ---------- ENGAGEMENT ---------- */
+  .phases{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    counter-reset:phase;
+  }
+  .phase-card{
+    background:var(--navy);
+    color:#fff;
+    border-radius:var(--radius);
+    padding:26px 22px;
+    position:relative;
+    min-height:190px;
+  }
+  .phase-card .phase-num{
+    font-family:'Spectral',serif;
+    font-size:2rem;
+    color:var(--gold);
+    font-weight:700;
+    margin-bottom:10px;
+    display:block;
+  }
+  .phase-card h3{color:#fff;font-size:1.05rem;margin-bottom:6px;}
+  .phase-card .when{
+    font-size:.78rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:rgba(255,255,255,.6);
+    margin-bottom:10px;
+    display:block;
+  }
+  .phase-card p{color:rgba(255,255,255,.8);font-size:.92rem;margin:0;}
+
+  /* ---------- CHECKLIST ---------- */
+  .included-wrap{
+    background:var(--paper);
+  }
+  .checklist{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px 32px;
+    max-width:820px;
+    margin:0 auto;
+  }
+  .check-item{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:16px 18px;
+  }
+  .check-item .mark{
+    flex:0 0 auto;
+    width:26px;height:26px;
+    border-radius:50%;
+    background:var(--navy);
+    color:var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;
+    font-size:.85rem;
+  }
+  .check-item p{margin:0;font-size:.96rem;color:var(--ink);}
+
+  /* ---------- CASE STUDIES ---------- */
+  .filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+    margin-bottom:36px;
+  }
+  .filter-chip{
+    border:1.5px solid var(--line);
+    background:#fff;
+    color:var(--navy);
+    padding:8px 18px;
+    border-radius:999px;
+    font-weight:600;
+    font-size:.88rem;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .filter-chip:hover{border-color:var(--gold);}
+  .filter-chip.active{
+    background:var(--navy);
+    border-color:var(--navy);
+    color:#fff;
+  }
+  .case-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:22px;
+  }
+  .case-card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:24px 24px 20px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+  }
+  .case-card.is-hidden{display:none;}
+  .case-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
+  .industry-tag{
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    font-weight:700;
+    color:var(--navy);
+    background:rgba(11,31,58,.08);
+    padding:4px 10px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .illustrative-tag{
+    font-size:.68rem;
+    color:var(--muted);
+    font-style:italic;
+    white-space:nowrap;
+  }
+  .case-profile{font-weight:600;color:var(--navy);font-size:.98rem;margin-bottom:10px;}
+  .case-card h3{font-size:1.12rem;margin-bottom:8px;}
+  .case-card .label{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);font-weight:700;margin-bottom:4px;display:block;}
+  .case-card .body-text{font-size:.92rem;color:var(--muted);margin-bottom:14px;}
+  .case-stats{display:flex;gap:16px;margin:6px 0 14px;flex-wrap:wrap;}
+  .stat{background:var(--paper);border-radius:10px;padding:10px 16px;flex:1;min-width:120px;}
+  .stat .num{font-family:'Spectral',serif;font-weight:700;color:var(--navy);font-size:1.3rem;display:block;}
+  .stat .cap{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+  .case-impact{font-size:.9rem;color:var(--ink);border-top:1px dashed var(--line);padding-top:12px;margin-top:auto;}
+  .case-impact strong{color:var(--navy);}
+  .methodology-note{
+    max-width:760px;
+    margin:36px auto 0;
+    font-size:.72rem;
+    color:var(--muted);
+    text-align:center;
+    padding:18px 20px;
+    background:var(--paper);
+    border-radius:12px;
+  }
+
+  /* ---------- CLOSING CTA ---------- */
+  .cta-close{
+    background:linear-gradient(135deg,var(--navy),var(--navy-2));
+    color:#fff;
+    text-align:center;
+  }
+  .cta-close h2{color:#fff;}
+  .cta-close p{color:rgba(255,255,255,.82);max-width:52ch;margin:0 auto 28px;}
+  .cta-contact{
+    margin-top:26px;
+    font-size:.9rem;
+    color:rgba(255,255,255,.6);
+  }
+
+  footer{
+    background:var(--navy);
+    color:rgba(255,255,255,.6);
+    padding:32px 0;
+    font-size:.85rem;
+  }
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  footer .wordmark{margin-bottom:0;font-size:1.05rem;color:#fff;}
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(11,31,58,.55);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:100;
+    padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:#fff;
+    border-radius:var(--radius);
+    max-width:440px;
+    width:100%;
+    padding:32px 28px;
+    position:relative;
+    box-shadow:0 30px 60px rgba(0,0,0,.3);
+  }
+  .modal h3{margin-bottom:6px;}
+  .modal p.desc{color:var(--muted);font-size:.92rem;margin-bottom:20px;}
+  .modal-close{
+    position:absolute;top:14px;right:16px;
+    background:none;border:none;font-size:1.3rem;
+    cursor:pointer;color:var(--muted);line-height:1;
+  }
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:.82rem;font-weight:600;color:var(--navy);margin-bottom:5px;}
+  .field input{
+    width:100%;
+    padding:11px 12px;
+    border-radius:8px;
+    border:1.5px solid var(--line);
+    font-family:'Work Sans',sans-serif;
+    font-size:.95rem;
+  }
+  .field input:focus{outline:none;border-color:var(--gold);}
+  .modal .btn-primary{width:100%;margin-top:6px;}
+  .form-status{font-size:.85rem;margin-top:10px;text-align:center;}
+  .form-status.success{color:#1a7a3c;}
+  .form-status.error{color:#b3261e;}
+
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .video-card{order:-1;max-width:420px;margin:0 auto 8px;}
+    .tiers{grid-template-columns:1fr;}
+    .phases{grid-template-columns:1fr 1fr;}
+    .checklist{grid-template-columns:1fr;}
+    .case-grid{grid-template-columns:1fr;}
+    footer .wrap{flex-direction:column;text-align:center;}
+  }
+  @media (max-width:480px){
+    .phases{grid-template-columns:1fr;}
+    section{padding:52px 0;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="brand-lockup">
+        <div class="wordmark">SquadLogic<span class="dot">.ai</span></div>
+        <span class="eyebrow">Diagnose. Pilot. Prove ROI.</span>
+      </div>
+      <h1>AI that earns its place in your business — proven on one real workflow before you buy anything bigger.</h1>
+      <p class="subhead">No jargon, no six-figure platform commitment. We start with a clear picture of where you stand, run a real pilot on one workflow, and show you the before-and-after numbers before you decide what's next.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary" onclick="openModal()">Book a Diagnostic Call</button>
+        <a class="btn btn-ghost" href="#case-studies">Case Studies</a>
+      </div>
+    </div>
+    <div class="video-card">
+      <video poster="squadlogic-value-poster.jpg" muted autoplay loop playsinline>
+        <source src="squadlogic-value-video.mp4" type="video/mp4">
+      </video>
+      <div class="video-caption">The gap, the approach, the offer</div>
+    </div>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="wrap">
+    <div class="strip-item"><span class="n">1</span>Diagnostic before pitch</div>
+    <div class="strip-item"><span class="n">2</span>Buy before build</div>
+    <div class="strip-item"><span class="n">3</span>Pilot before scale</div>
+  </div>
+</div>
+
+<section id="who-its-for">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Who this is for</h2>
+      <p>Same approach, sized to where your business actually is right now.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier-card">
+        <span class="tag">Under $1M</span>
+        <h3>Just getting started</h3>
+        <p>You're doing everything by feel and by hand. We find the one workflow where AI saves the most hours for the least effort, and prove it before you spend a dollar on new software.</p>
+      </div>
+      <div class="tier-card">
+        <span class="tag">$1M–$5M</span>
+        <h3>Outgrowing gut feel</h3>
+        <p>Growth has outpaced your systems. We find where the cracks are actually costing you money, then pilot a fix in one part of the business before rolling it out everywhere.</p>
+      </div>
+      <div class="tier-card">
+        <span class="tag">$5M+</span>
+        <h3>Multiple locations or teams</h3>
+        <p>What works at one location doesn't automatically work at four. We pilot in one location or team first, so what you scale is already proven — not a guess.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="engagement" class="included-wrap">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How the engagement works</h2>
+      <p>Four phases. No commitment beyond the phase you're in.</p>
+    </div>
+    <div class="phases">
+      <div class="phase-card">
+        <span class="phase-num">01</span>
+        <span class="when">Weeks 1–2</span>
+        <h3>Diagnostic</h3>
+        <p>We map how the business actually runs today and find where the real gaps are — not where a vendor's pitch says they should be.</p>
+      </div>
+      <div class="phase-card">
+        <span class="phase-num">02</span>
+        <span class="when">Weeks 3–4</span>
+        <h3>Pilot Design</h3>
+        <p>We pick one workflow, define what success looks like in plain numbers, and set the sign-off rules before anything touches a live system.</p>
+      </div>
+      <div class="phase-card">
+        <span class="phase-num">03</span>
+        <span class="when">90 Days</span>
+        <h3>Pilot Execution</h3>
+        <p>The pilot runs on one real workflow, with a fair before-and-after comparison — not a demo, the actual job getting done.</p>
+      </div>
+      <div class="phase-card">
+        <span class="phase-num">04</span>
+        <span class="when">After 90 Days</span>
+        <h3>Scale or Iterate</h3>
+        <p>If the numbers hold up, we help you roll it out further. If they don't, you know that before spending more — either way, you decide with real data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="included">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What's included</h2>
+      <p>Every engagement covers the same ground, in plain language.</p>
+    </div>
+    <div class="checklist">
+      <div class="check-item"><span class="mark">✓</span><p>A clear starting point — where your business stands today, in plain terms</p></div>
+      <div class="check-item"><span class="mark">✓</span><p>A ranked list of the opportunities most worth pursuing first</p></div>
+      <div class="check-item"><span class="mark">✓</span><p>A check of whether your data is actually there and usable, before we promise anything</p></div>
+      <div class="check-item"><span class="mark">✓</span><p>Sign-off rules for any AI-assisted decision, so nothing runs unchecked</p></div>
+      <div class="check-item"><span class="mark">✓</span><p>A working pilot on one real workflow — not a slide deck or a demo</p></div>
+      <div class="check-item"><span class="mark">✓</span><p>A fair before-and-after comparison, so you can see what actually changed</p></div>
+      <div class="check-item"><span class="mark">✓</span><p>A go/no-go recommendation grounded in real numbers, not opinions</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="case-studies" class="included-wrap">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What a pilot looks like</h2>
+      <p>Illustrative examples of the kind of gap we find and the kind of result a 90-day pilot can show.</p>
+    </div>
+
+    <div class="filters">
+      <button class="filter-chip active" data-filter="all">All</button>
+      <button class="filter-chip" data-filter="hvac">HVAC</button>
+      <button class="filter-chip" data-filter="plumbing">Plumbing</button>
+      <button class="filter-chip" data-filter="electrical">Electrical</button>
+      <button class="filter-chip" data-filter="dental">Dental &amp; Medical</button>
+      <button class="filter-chip" data-filter="law">Law Firms</button>
+    </div>
+
+    <div class="case-grid" id="caseGrid">
+
+      <div class="case-card" data-industry="hvac">
+        <div class="case-top"><span class="industry-tag">HVAC</span><span class="illustrative-tag">Illustrative example</span></div>
+        <div class="case-profile">A 4-truck HVAC company with three senior techs eligible to retire in the next two years</div>
+        <span class="label">The gap</span>
+        <h3>Capturing what senior techs know before it walks out the door</h3>
+        <p class="body-text">Decades of know-how on quirky legacy installs lived only in a few technicians' heads, with no system of record — every upcoming retirement was a slow-motion callback problem.</p>
+        <span class="label">What changed</span>
+        <p class="body-text">Piloted an internal, company-only knowledge base that captures senior techs' site notes and troubleshooting shortcuts in plain language, searchable by address and equipment — nothing shared outside the company's own systems.</p>
+        <div class="case-stats">
+          <div class="stat"><span class="num">$38,000</span><span class="cap">est. avoided callback cost / yr</span></div>
+          <div class="stat"><span class="num">22 hrs</span><span class="cap">senior-tech time saved / mo</span></div>
+        </div>
+        <div class="case-impact"><strong>Customer impact:</strong> junior techs resolve legacy-install issues on the first visit instead of phoning a retired tech at home.</div>
+      </div>
+
+      <div class="case-card" data-industry="hvac">
+        <div class="case-top"><span class="industry-tag">HVAC</span><span class="illustrative-tag">Illustrative example</span></div>
+        <div class="case-profile">A 6-truck HVAC company doing about 50 installs a month, increasingly inverter/variable-speed systems</div>
+        <span class="label">The gap</span>
+        <h3>Inverter callbacks were quietly eating the install margin</h3>
+        <p class="body-text">Techs undertrained on inverter and variable-speed systems generated a disproportionate share of callbacks — comfort complaints and misread error codes a standard split system rarely produces.</p>
+        <span class="label">What changed</span>
+        <p class="body-text">Piloted an AI diagnostic-assist tool that walks a tech through inverter-specific fault trees and manufacturer bulletins from the truck, in real time.</p>
+        <div class="case-stats">
+          <div class="stat"><span class="num">$24,500</span><span class="cap">est. reduced truck-roll cost / yr</span></div>
+          <div class="stat"><span class="num">31 hrs</span><span class="cap">callback time saved / mo</span></div>
+        </div>
+        <div class="case-impact"><strong>Customer impact:</strong> comfort complaints drop because the true root cause gets fixed on the first visit.</div>
+      </div>
+
+      <div class="case-card" data-industry="plumbing">
+        <div class="case-top"><span class="industry-tag">Plumbing</span><span class="illustrative-tag">Illustrative example</span></div>
+        <div class="case-profile">A 5-truck plumbing company handling roughly 30 emergency water-damage calls a month</div>
+        <span class="label">The gap</span>
+        <h3>A slow dispatch call turns a repair into a claim</h3>
+        <p class="body-text">The gap between a same-day fix and a two-day delay was the single biggest driver of claim severity, but dispatch had no way to flag a high-risk job before it escalated.</p>
+        <span class="label">What changed</span>
+        <p class="body-text">Piloted an AI dispatch-prioritization step that flags active-water-loss calls for same-day routing based on the job description and photos submitted at intake.</p>
+        <div class="case-stats">
+          <div class="stat"><span class="num">$52,000</span><span class="cap">est. avoided severity escalation / yr</span></div>
+          <div class="stat"><span class="num">14 hrs</span><span class="cap">dispatcher triage time saved / mo</span></div>
+        </div>
+        <div class="case-impact"><strong>Customer impact:</strong> fewer emergency calls turn into full remediation or insurance claims.</div>
+      </div>
+
+      <div class="case-card" data-industry="plumbing">
+        <div class="case-top"><span class="industry-tag">Plumbing</span><span class="illustrative-tag">Illustrative example</span></div>
+        <div class="case-profile">A 4-truck plumbing company quoting 15–20 repipe and renovation jobs a month</div>
+        <span class="label">The gap</span>
+        <h3>Copper prices moved faster than the quote did</h3>
+        <p class="body-text">Copper and fixture prices shift week to week, so a quote written a few days before a job started often undershot actual material cost — eating straight into the margin.</p>
+        <span class="label">What changed</span>
+        <p class="body-text">Piloted an AI quoting-assist tool tied to a live materials price feed that flags any outstanding quote at risk of drift before it's sent.</p>
+        <div class="case-stats">
+          <div class="stat"><span class="num">$19,000</span><span class="cap">est. recovered margin / yr</span></div>
+          <div class="stat"><span class="num">9 hrs</span><span class="cap">re-quoting time saved / mo</span></div>
+        </div>
+        <div class="case-impact"><strong>Customer impact:</strong> fewer "the price went up" conversations once the crew is already on site.</div>
+      </div>
+
+      <div class="case-card" data-industry="electrical">
+        <div class="case-top"><span class="industry-tag">Electrical</span><span class="illustrative-tag">Illustrative example</span></div>
+        <div class="case-profile">A 5-crew electrical contractor doing 20–25 panel-upgrade estimates a month</div>
+        <span class="label">The gap</span>
+        <h3>Hand-run load calcs missed circuits added over the years</h3>
+        <p class="body-text">Load calculations done by hand at the estimate stage routinely missed circuits added to a property over time, turning a chunk of "routine" panel upgrades into a bigger, unbudgeted job once work started.</p>
+        <span class="label">What changed</span>
+        <p class="body-text">Piloted an AI-assisted load-calc check that cross-references the panel photo and the customer's described circuits against code before the estimate goes out.</p>
+        <div class="case-stats">
+          <div class="stat"><span class="num">$27,000</span><span class="cap">est. avoided change-order disputes / yr</span></div>
+          <div class="stat"><span class="num">18 hrs</span><span class="cap">rework time saved / mo</span></div>
+        </div>
+        <div class="case-impact"><strong>Customer impact:</strong> fewer surprise costs sprung on customers mid-job, fewer disputed invoices.</div>
+      </div>
+
+      <div class="case-card" data-industry="electrical">
+        <div class="case-top"><span class="industry-tag">Electrical</span><span class="illustrative-tag">Illustrative example</span></div>
+        <div class="case-profile">A 6-crew electrical contractor working across 8 neighboring towns</div>
+        <span class="label">The gap</span>
+        <h3>One shared playbook instead of tribal memory of what each town requires</h3>
+        <p class="body-text">Each town's inspector enforced slightly different, locally-amended code requirements — knowledge that lived only in whichever crew lead had worked that town before. New crews learned the hard way, with rejected inspections.</p>
+        <span class="label">What changed</span>
+        <p class="body-text">Piloted a shared, searchable playbook of jurisdiction-specific requirements built from past inspection notes — kept entirely in the company's own systems.</p>
+        <div class="case-stats">
+          <div class="stat"><span class="num">$15,500</span><span class="cap">est. avoided re-inspection cost / yr</span></div>
+          <div class="stat"><span class="num">12 hrs</span><span class="cap">inspection-prep time saved / mo</span></div>
+        </div>
+        <div class="case-impact"><strong>Customer impact:</strong> more jobs pass inspection on the first try, and close faster.</div>
+      </div>
+
+      <div class="case-card" data-industry="dental">
+        <div class="case-top"><span class="industry-tag">Dental &amp; Medical</span><span class="illustrative-tag">Illustrative example</span></div>
+        <div class="case-profile">A 3-location dental practice submitting roughly 400 insurance claims a month</div>
+        <span class="label">The gap</span>
+        <h3>The same denial reasons kept coming back</h3>
+        <p class="body-text">A recurring, predictable set of denial reasons — coding mismatches, missing attachments — ate front-desk hours in appeals and resubmissions every single week.</p>
+        <span class="label">What changed</span>
+        <p class="body-text">Piloted an AI claim-scrubbing check run before submission that flags the same denial patterns the practice has hit before, with a person reviewing every flag.</p>
+        <div class="case-stats">
+          <div class="stat"><span class="num">$41,000</span><span class="cap">est. claims recovered / written off less / yr</span></div>
+          <div class="stat"><span class="num">26 hrs</span><span class="cap">front-desk rework saved / mo</span></div>
+        </div>
+        <div class="case-impact"><strong>Customer impact:</strong> patients see fewer surprise balance-due letters months after their visit.</div>
+      </div>
+
+      <div class="case-card" data-industry="dental">
+        <div class="case-top"><span class="industry-tag">Dental &amp; Medical</span><span class="illustrative-tag">Illustrative example</span></div>
+        <div class="case-profile">A 2-location medical practice processing prior authorizations for imaging and specialist referrals</div>
+        <span class="label">The gap</span>
+        <h3>Physicians were spending clinical hours on paperwork</h3>
+        <p class="body-text">Physicians and staff spent real clinical hours each week compiling records for prior-authorization requests — time that came directly out of patient-facing capacity.</p>
+        <span class="label">What changed</span>
+        <p class="body-text">Piloted an AI-assisted intake that pre-fills the prior-authorization packet from the chart, leaving just a physician review and sign-off.</p>
+        <div class="case-stats">
+          <div class="stat"><span class="num">$33,000</span><span class="cap">est. value of physician time recovered / yr</span></div>
+          <div class="stat"><span class="num">11 hrs</span><span class="cap">staff time saved / wk</span></div>
+        </div>
+        <div class="case-impact"><strong>Customer impact:</strong> patients get an answer on imaging or specialist approval in days, not a week of back-and-forth.</div>
+      </div>
+
+      <div class="case-card" data-industry="law">
+        <div class="case-top"><span class="industry-tag">Law Firms</span><span class="illustrative-tag">Illustrative example</span></div>
+        <div class="case-profile">A 6-attorney general-practice firm running lean on paralegal support</div>
+        <span class="label">The gap</span>
+        <h3>Attorneys were absorbing unbillable admin work</h3>
+        <p class="body-text">With paralegal hiring tight, attorneys had started absorbing unbillable administrative work — formatting, filing prep, routine correspondence — that used to go to support staff.</p>
+        <span class="label">What changed</span>
+        <p class="body-text">Piloted an AI drafting-assist tool for routine correspondence and filing prep, with every draft reviewed and signed off by the attorney before it went out.</p>
+        <div class="case-stats">
+          <div class="stat"><span class="num">$58,000</span><span class="cap">est. billable hours recovered / yr</span></div>
+          <div class="stat"><span class="num">9 hrs</span><span class="cap">attorney time saved / wk</span></div>
+        </div>
+        <div class="case-impact"><strong>Customer impact:</strong> attorneys spend more of the week on billable client work instead of catching up on admin.</div>
+      </div>
+
+      <div class="case-card" data-industry="law">
+        <div class="case-top"><span class="industry-tag">Law Firms</span><span class="illustrative-tag">Illustrative example</span></div>
+        <div class="case-profile">A firm handling 2–3 active litigation matters with document sets in the tens of thousands of pages</div>
+        <span class="label">The gap</span>
+        <h3>First-pass document review was slow, expensive, and behind schedule</h3>
+        <p class="body-text">Document review at that volume, billed at associate rates, was slow and costly — and delays kept pushing discovery deadlines closer to the wire.</p>
+        <span class="label">What changed</span>
+        <p class="body-text">Piloted an AI-assisted first-pass review that flags likely-relevant documents for attorney review, with every flag checked by a human before it counts.</p>
+        <div class="case-stats">
+          <div class="stat"><span class="num">$71,000</span><span class="cap">est. saved vs. associate-hour review cost</span></div>
+          <div class="stat"><span class="num">140 hrs</span><span class="cap">first-pass review time saved</span></div>
+        </div>
+        <div class="case-impact"><strong>Customer impact:</strong> discovery deadlines are easier to hit without expanding the review team.</div>
+      </div>
+
+    </div>
+
+    <div class="methodology-note">
+      Every case above is an <strong>illustrative example</strong>, not a verified client result — no real client is named or measured here. Dollar and hour figures are estimates built from published industry benchmarks applied to a conservative, market-typical business profile and ticket size, for the purpose of showing the kind of outcome a diagnostic-and-pilot engagement targets. When real client data exists, it replaces the matching illustrative example rather than being blended with it.
+    </div>
+  </div>
+</section>
+
+<section class="cta-close">
+  <div class="wrap">
+    <h2>See what a diagnostic finds in your business</h2>
+    <p>One conversation, no obligation. If there's a real gap worth piloting, you'll know within the first two weeks.</p>
+    <button class="btn btn-primary" onclick="openModal()">Book a Diagnostic Call</button>
+    <div class="cta-contact"><a href="mailto:hello@SquadLogic.AI">hello@SquadLogic.AI</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="wordmark">SquadLogic<span class="dot" style="color:var(--gold)">.ai</span></div>
+      <div>Diagnose. Pilot. Prove ROI.</div>
+    </div>
+    <div>&copy; 2026 SquadLogic.ai. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- Lead capture modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h3>Book a Diagnostic Call</h3>
+    <p class="desc">Tell us a little about your business and we'll reach out to schedule.</p>
+    <form id="diagForm">
+      <div class="field">
+        <label for="f-name">Name</label>
+        <input id="f-name" name="name" type="text" required>
+      </div>
+      <div class="field">
+        <label for="f-company">Company</label>
+        <input id="f-company" name="company" type="text" required>
+      </div>
+      <div class="field">
+        <label for="f-email">Email</label>
+        <input id="f-email" name="email" type="email" required>
+      </div>
+      <div class="field">
+        <label for="f-phone">Phone</label>
+        <input id="f-phone" name="phone" type="tel" required>
+      </div>
+      <input type="hidden" name="_subject" value="New Diagnostic Call request — SquadLogic.ai">
+      <input type="hidden" name="_captcha" value="false">
+      <button type="submit" class="btn btn-primary">Request a Call</button>
+      <div class="form-status" id="formStatus"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // ---- One-time setup: replace with your real inbox before going live ----
+  // 1) Put your email here.
+  // 2) FormSubmit.co will send ONE confirmation email to that address the
+  //    first time a real visitor submits the form — click the link in it
+  //    to activate delivery. No account, no server needed.
+  const DIAGNOSTIC_FORM_EMAIL = "hello@SquadLogic.AI";
+
+  function openModal(){
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModal(){
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+  document.getElementById('modalOverlay').addEventListener('click', function(e){
+    if(e.target === this) closeModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeModal();
+  });
+
+  document.getElementById('diagForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const status = document.getElementById('formStatus');
+    const btn = this.querySelector('button[type="submit"]');
+    if (DIAGNOSTIC_FORM_EMAIL.indexOf('[') === 0){
+      status.textContent = 'Form not yet activated — add your email in the site script.';
+      status.className = 'form-status error';
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try{
+      const data = new FormData(this);
+      const res = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(DIAGNOSTIC_FORM_EMAIL), {
+        method:'POST',
+        headers:{ 'Accept':'application/json' },
+        body:data
+      });
+      if(res.ok){
+        status.textContent = "Thanks — we'll be in touch shortly.";
+        status.className = 'form-status success';
+        this.reset();
+        setTimeout(closeModal, 1800);
+      } else {
+        throw new Error('Request failed');
+      }
+    }catch(err){
+      status.textContent = 'Something went wrong — please try again or email us directly.';
+      status.className = 'form-status error';
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Request a Call';
+    }
+  });
+
+  // ---- Case study industry filter ----
+  const chips = document.querySelectorAll('.filter-chip');
+  const cards = document.querySelectorAll('#caseGrid .case-card');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filter = chip.dataset.filter;
+      cards.forEach(card => {
+        const show = (filter === 'all' || card.dataset.industry === filter);
+        card.classList.toggle('is-hidden', !show);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
